@@ -1,0 +1,68 @@
+$(document).on('click','.btn-add-video',function(){
+      var ten_video = $('.ten_video').val();
+      var link_video = $('.link_video').val();
+      var desc_video = $('.desc_video').val();
+     
+      var form_data = new FormData();
+      form_data.append("file", document.getElementById("file_img_video").files[0]);
+      form_data.append("ten_video",ten_video);  
+      form_data.append("link_video",link_video);  
+      form_data.append("desc_video",desc_video);  
+        $.ajax({
+          url:"{{url('/insert-video')}}",
+          method:"POST",
+          headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+
+        },
+          data:form_data,
+
+          // contentType:false,
+        //   cache::false,
+        //  processData:false,  
+          success:function(data){
+            load_video();
+
+            $('#notify').html('<span class="text text-success">Đã thêm thành công</span>');
+          }
+        });
+    });  
+
+
+
+        var video_type = $(this).data('video_type');
+        //alert(video_type);
+        var id = $(this).data('id');
+        // var _token = $('input[name="_token"]').val();
+        //alert(video_type);
+        if(video_type=='ten_video'){
+          var video_edit = $('#'+video_type+'-'+id).text();
+          var video_check = video_type;
+        }else if(video_type == 'link_video'){
+          var video_edit = $('#'+video_type+'-'+id).text();
+          var video_check = video_type;
+        }else if(video_type == 'desc_video'){
+          var video_edit = $('#'+video_type)+'-'+id.text();
+          var video_check = video_type;
+        }else {
+          var video_edit = $('#'+video_type+'-'+id).text();
+          var video_check = video_type;
+        }
+        $.ajax({
+          url:"{{url('/update-video')}}",
+          method:"POST",
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+          contentType:false,
+          cache:false,
+          processData:false,
+          //data:{video_check=video_check, video_edit:video_edit, id:id, _token:_token},
+      
+        
+         success:function(data){
+          load_video();
+
+          $('#notify').html('<span class="text text-success">sửa thành công</span>');
+          }
+       });
